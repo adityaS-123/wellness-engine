@@ -112,7 +112,7 @@ model Supplement {
 
 enum BudgetTier {
   ESSENTIAL
-  GOOD
+  COMPREHENSIVE
   PREMIUM
 }
 

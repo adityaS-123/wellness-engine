@@ -44,7 +44,7 @@ async function main() {
         medicationInteractions: supplement.medication_interactions ? [supplement.medication_interactions] : [],
         genderModifiers: { MALE: 1.0, FEMALE: 1.0 },
         ageModifiers: { '18-30': 1.0, '30-50': 1.0, '50+': 1.0 },
-        budgetTier: (supplement.budget_tier === 'premium' ? 'PREMIUM' : supplement.budget_tier === 'recommended' ? 'GOOD' : 'ESSENTIAL') as any,
+        budgetTier: (supplement.budget_tier === 'premium' ? 'PREMIUM' : supplement.budget_tier === 'recommended' ? 'COMPREHENSIVE' : 'ESSENTIAL') as any,
         evidenceLevel: (supplement.evidence_level === 'strong' ? 'STRONG' : supplement.evidence_level === 'moderate' ? 'MODERATE' : 'EMERGING') as any,
         useCasePriority: supplement.priority_score ? supplement.priority_score * 10 : 50,
       },

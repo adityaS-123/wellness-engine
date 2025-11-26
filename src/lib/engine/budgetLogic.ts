@@ -1,6 +1,6 @@
 import { DemographicData } from './types';
 
-export type BudgetTier = 'ESSENTIAL' | 'GOOD' | 'PREMIUM';
+export type BudgetTier = 'ESSENTIAL' | 'COMPREHENSIVE' | 'PREMIUM';
 
 /**
  * Budget tier rules and supplement selection logic
@@ -24,11 +24,11 @@ export const BUDGET_TIER_DEFINITIONS: Record<
     doseMultiplier: 0.8,
     maxMonthlyCost: 50,
   },
-  GOOD: {
+  COMPREHENSIVE: {
     name: 'Balanced Approach',
     description: 'Core + complementary supplements',
     maxSupplements: 8,
-    allowedTiers: ['ESSENTIAL', 'GOOD'],
+    allowedTiers: ['ESSENTIAL', 'COMPREHENSIVE'],
     doseMultiplier: 1.0,
     maxMonthlyCost: 100,
   },
@@ -36,7 +36,7 @@ export const BUDGET_TIER_DEFINITIONS: Record<
     name: 'Comprehensive Stack',
     description: 'Full protocol with premium additions',
     maxSupplements: 12,
-    allowedTiers: ['ESSENTIAL', 'GOOD', 'PREMIUM'],
+    allowedTiers: ['ESSENTIAL', 'COMPREHENSIVE', 'PREMIUM'],
     doseMultiplier: 1.1,
     maxMonthlyCost: 200,
   },
@@ -50,14 +50,14 @@ export const SUPPLEMENT_BUDGET_CATEGORIES: Record<string, BudgetTier> = {
   'Magnesium Glycinate': 'ESSENTIAL',
   'Zinc Picolinate': 'ESSENTIAL',
   'B-Complex (High Potency)': 'ESSENTIAL',
-  'Iron (Ferrous Bisglycinate)': 'GOOD',
-  'Probiotics (Multi-strain)': 'GOOD',
-  'Omega-3 Fish Oil': 'GOOD',
-  'Turmeric (95% Curcuminoids)': 'GOOD',
-  'Ashwagandha (Withanolides 5%)': 'GOOD',
-  'Creatine Monohydrate': 'GOOD',
-  'Rhodiola Rosea (3% Rosavins)': 'GOOD',
-  'L-Theanine': 'GOOD',
+  'Iron (Ferrous Bisglycinate)': 'COMPREHENSIVE',
+  'Probiotics (Multi-strain)': 'COMPREHENSIVE',
+  'Omega-3 Fish Oil': 'COMPREHENSIVE',
+  'Turmeric (95% Curcuminoids)': 'COMPREHENSIVE',
+  'Ashwagandha (Withanolides 5%)': 'COMPREHENSIVE',
+  'Creatine Monohydrate': 'COMPREHENSIVE',
+  'Rhodiola Rosea (3% Rosavins)': 'COMPREHENSIVE',
+  'L-Theanine': 'COMPREHENSIVE',
   'CoQ10 (Ubiquinol)': 'PREMIUM',
   'Resveratrol': 'PREMIUM',
   'Berberine': 'PREMIUM',
@@ -139,8 +139,8 @@ export function isSupplementInTier(
 
   // Tier includes all lower tiers
   if (tier === 'PREMIUM') return true;
-  if (tier === 'GOOD')
-    return category === 'ESSENTIAL' || category === 'GOOD';
+  if (tier === 'COMPREHENSIVE')
+    return category === 'ESSENTIAL' || category === 'COMPREHENSIVE';
   if (tier === 'ESSENTIAL') return category === 'ESSENTIAL';
 
   return false;
@@ -160,7 +160,7 @@ export function estimateMonthlyBudget(
   // Rough estimates per supplement per month (USD)
   const costPerSupp = {
     ESSENTIAL: { min: 8, max: 15 },
-    GOOD: { min: 12, max: 25 },
+    COMPREHENSIVE: { min: 12, max: 25 },
     PREMIUM: { min: 20, max: 50 },
   };
 
@@ -199,7 +199,7 @@ export function suggestBudgetTier(
     return 'PREMIUM';
   }
 
-  // Most people do well with GOOD
-  return 'GOOD';
+  // Most people do well with COMPREHENSIVE
+  return 'COMPREHENSIVE';
 }
 
