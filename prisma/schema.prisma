@@ -1,0 +1,382 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER MANAGEMENT
+// ============================================
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  image         String?
+  role          UserRole  @default(PRACTITIONER)
+  emailVerified DateTime?
+  password      String?
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts      Account[]
+  sessions      Session[]
+  prescriptions Prescription[]
+  chatSessions  ChatSession[]
+
+  @@map("users")
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+enum UserRole {
+  ADMIN
+  PRACTITIONER
+  USER
+}
+
+// ============================================
+// CLINICAL METADATA
+// ============================================
+
+model Supplement {
+  id                      String   @id @default(cuid())
+  externalId              String   @unique // For import mapping
+  name                    String   @unique
+  category                String   // vitamin, mineral, herb, amino_acid, etc.
+  primaryMechanism        String
+  benefits                String[] // Array of benefit descriptions
+  
+  // Dosing information
+  doseRangeMin            Float
+  doseRangeMax            Float
+  doseRangeTypical        Float
+  doseUnit                String   // mg, mcg, IU, etc.
+  
+  // Safety & interactions
+  contraindications       String[] // Array of conditions to avoid
+  medicationInteractions  String[] // Array of medication interactions
+  
+  // Personalization modifiers
+  genderModifiers         Json     // { "female": 1.2, "male": 0.8 }
+  ageModifiers            Json     // { "18-30": 1.0, "30-50": 1.2, "50+": 1.5 }
+  
+  // Classification
+  budgetTier              BudgetTier  // essential, good, premium
+  evidenceLevel           EvidenceLevel // strong, moderate, emerging
+  useCasePriority         Int          // 1-100 priority ranking
+  
+  // Relationships
+  protocols               ProtocolSupplement[]
+  
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+  createdBy               String?  // User ID who created it
+  
+  @@index([category])
+  @@index([budgetTier])
+  @@map("supplements")
+}
+
+enum BudgetTier {
+  ESSENTIAL
+  GOOD
+  PREMIUM
+}
+
+enum EvidenceLevel {
+  STRONG
+  MODERATE
+  EMERGING
+}
+
+model Protocol {
+  id                    String   @id @default(cuid())
+  externalId            String   @unique
+  name                  String
+  goal                  String   // "Energy", "Recovery", "Longevity", etc.
+  description           String?
+  
+  // Core supplements (always included if safe)
+  coreSupplementsJson   Json     // Array of supplement IDs
+  
+  // Optional supplements (selected based on scoring)
+  optionalSupplementsJson Json?  // Array of supplement IDs
+  
+  // Red flags specific to this protocol
+  redFlagsJson          Json?    // Array of red flag conditions
+  
+  // Dose modifiers
+  doseModifiersJson     Json?    // Dynamic dosing rules
+  
+  // Demographic considerations
+  demographicModifiersJson Json? // Age, gender specific rules
+  
+  // Clinical flag triggers
+  clinicalFlagsJson     Json?    // Conditions that trigger protocol changes
+  
+  // Budget rules
+  budgetRulesJson       Json?    // How protocol changes per budget tier
+  
+  // Pathway focus areas
+  pathwayFocusJson      Json?    // Primary health focus areas
+  
+  // Protocol supplements linking
+  supplements           ProtocolSupplement[]
+  
+  // Tracking
+  isActive              Boolean  @default(true)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  createdBy             String?  // User ID who created it
+  
+  @@index([goal])
+  @@map("protocols")
+}
+
+model ProtocolSupplement {
+  id            String     @id @default(cuid())
+  protocolId    String
+  supplementId  String
+  protocol      Protocol   @relation(fields: [protocolId], references: [id], onDelete: Cascade)
+  supplement    Supplement @relation(fields: [supplementId], references: [id], onDelete: Cascade)
+  
+  isCore        Boolean    @default(false) // Core vs optional
+  priority      Int        @default(100)   // Lower = higher priority
+  dosageModifier Float     @default(1.0)   // Multiplier for base dose
+  timing        String?    // AM, PM, With Meals, etc.
+  
+  @@unique([protocolId, supplementId])
+  @@map("protocol_supplements")
+}
+
+// ============================================
+// SAFETY RULES
+// ============================================
+
+model SafetyRule {
+  id                String   @id @default(cuid())
+  externalId        String   @unique
+  name              String
+  description       String
+  
+  // What triggers this rule
+  triggerType       SafetyTriggerType
+  triggerValue      String   // Medication name, condition, etc.
+  
+  // What supplements are affected
+  affectedSupplements String[] // Array of supplement names
+  
+  // Rule severity
+  severity          SafetySeverity
+  
+  // Action to take
+  action            SafetyAction     // HARD_BLOCK, SOFT_WARN, ADJUST_DOSE
+  adjustedDose      Float?           // If action is ADJUST_DOSE
+  dosageUnit        String?
+  
+  // Warning message
+  warningMessage    String?
+  
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  @@index([triggerType, triggerValue])
+  @@map("safety_rules")
+}
+
+enum SafetyTriggerType {
+  MEDICATION
+  CONDITION
+  PREGNANCY
+  KIDNEY_DISEASE
+  LIVER_DISEASE
+  AUTOIMMUNE
+  LOW_BLOOD_PRESSURE
+  INSOMNIA
+  ANXIETY
+  HIGH_CORTISOL
+  CUSTOM
+}
+
+enum SafetySeverity {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+}
+
+enum SafetyAction {
+  HARD_BLOCK
+  SOFT_WARN
+  ADJUST_DOSE
+  REMOVE
+}
+
+model InteractionRule {
+  id              String   @id @default(cuid())
+  externalId      String   @unique
+  name            String
+  description     String
+  
+  // Interacting elements
+  supplement1Id   String?
+  supplement2Id   String?
+  medication      String?  // Medication name if not supplement-based
+  
+  // Interaction details
+  severity        InteractionSeverity
+  effect          String              // Description of interaction effect
+  recommendation  String              // What to do about it
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("interaction_rules")
+}
+
+enum InteractionSeverity {
+  CRITICAL
+  HIGH
+  MODERATE
+  LOW
+}
+
+// ============================================
+// PRESCRIPTIONS & HISTORY
+// ============================================
+
+model Prescription {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Input data
+  goal            String
+  demographicsJson Json
+  clinicalFlagsJson Json?
+  budgetTier      BudgetTier
+  
+  // Generated prescription data
+  morningStackJson Json
+  afternoonStackJson Json?
+  eveningStackJson Json?
+  weeklyCyclicalsJson Json?
+  lifestyleJson   Json
+  
+  // Safety outcomes
+  redFlagsJson    Json?    // Any red flags that were encountered
+  warningsJson    Json?    // Safety warnings
+  
+  // Output
+  summaryJson     Json
+  
+  // PDF data
+  pdfUrl          String?
+  pdfHtml         String?  @db.Text
+  
+  // Shopping list
+  shoppingListJson Json?
+  
+  // Status
+  status          PrescriptionStatus @default(DRAFT)
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  expiresAt       DateTime? // Auto-expire after certain period
+  
+  @@index([userId])
+  @@index([createdAt])
+  @@map("prescriptions")
+}
+
+enum PrescriptionStatus {
+  DRAFT
+  GENERATED
+  REVIEWED
+  ARCHIVED
+}
+
+// ============================================
+// AUDIT LOG
+// ============================================
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  action    String   // CREATE, UPDATE, DELETE, VIEW
+  entity    String   // Supplement, Protocol, SafetyRule, etc.
+  entityId  String
+  userId    String?
+  changes   Json?    // Before/after data
+  
+  createdAt DateTime @default(now())
+  
+  @@index([entity, entityId])
+  @@index([userId])
+  @@map("audit_logs")
+}
+
+// ============================================
+// CHAT HISTORY
+// ============================================
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  title     String
+  messages  ChatMessage[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@index([userId])
+  @@map("chat_sessions")
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   ChatSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  
+  type      String   // "user" or "bot"
+  content   String   @db.Text
+  
+  createdAt DateTime @default(now())
+  
+  @@index([sessionId])
+  @@map("chat_messages")
+}
