@@ -1,51 +1,121 @@
 import { DemographicData } from './types';
 
 /**
- * Goals that map to clinical protocols
+ * Goals that map directly to clinical metadata categories
  */
 export enum GoalType {
-  ENERGY_RECOVERY = 'ENERGY_RECOVERY',
-  STRESS_SLEEP = 'STRESS_SLEEP',
-  LONGEVITY = 'LONGEVITY',
-  ATHLETIC_PERFORMANCE = 'ATHLETIC_PERFORMANCE',
-  METABOLIC_HEALTH = 'METABOLIC_HEALTH',
-  IMMUNE_SUPPORT = 'IMMUNE_SUPPORT',
-  BRAIN_HEALTH = 'BRAIN_HEALTH',
-  JOINT_HEALTH = 'JOINT_HEALTH',
+  LONGEVITY = 'longevity',
+  CARDIO = 'cardio',
+  DETOX = 'detox',
+  IMMUNE = 'immune',
+  GUT = 'gut',
+  FITNESS = 'fitness',
+  WEIGHT = 'weight',
+  RECOVERY = 'recovery',
+  ENERGY = 'energy',
+  MEN_HORMONE = 'men_hormone',
+  WOMEN_HORMONE = 'women_hormone',
+  SLEEP = 'sleep',
+  STRESS = 'stress',
+  SKIN = 'skin',
+  NEURO = 'neuro',
+  URINARY = 'urinary',
+  METABOLIC = 'metabolic',
+  BRAIN = 'brain',
+  MOOD = 'mood',
+  JOINTS = 'joints',
+  HAIR = 'hair',
+  NAILS = 'nails',
 }
 
 export const GOAL_TO_PROTOCOL: Record<GoalType, { protocolId: string; label: string }> = {
-  [GoalType.ENERGY_RECOVERY]: {
-    protocolId: 'prot_001',
-    label: 'Energy & Recovery',
-  },
-  [GoalType.STRESS_SLEEP]: {
-    protocolId: 'prot_002',
-    label: 'Stress & Sleep',
-  },
   [GoalType.LONGEVITY]: {
-    protocolId: 'prot_003',
-    label: 'Longevity & Prevention',
-  },
-  [GoalType.ATHLETIC_PERFORMANCE]: {
-    protocolId: 'prot_004',
-    label: 'Athletic Performance',
-  },
-  [GoalType.METABOLIC_HEALTH]: {
-    protocolId: 'prot_005',
-    label: 'Metabolic Health',
-  },
-  [GoalType.IMMUNE_SUPPORT]: {
-    protocolId: 'prot_001', // Default fallback
-    label: 'Immune Support',
-  },
-  [GoalType.BRAIN_HEALTH]: {
-    protocolId: 'prot_003',
-    label: 'Brain Health',
-  },
-  [GoalType.JOINT_HEALTH]: {
     protocolId: 'prot_001',
-    label: 'Joint Health',
+    label: 'Longevity',
+  },
+  [GoalType.CARDIO]: {
+    protocolId: 'prot_002',
+    label: 'Cardio',
+  },
+  [GoalType.DETOX]: {
+    protocolId: 'prot_003',
+    label: 'Detox',
+  },
+  [GoalType.IMMUNE]: {
+    protocolId: 'prot_004',
+    label: 'Immune',
+  },
+  [GoalType.GUT]: {
+    protocolId: 'prot_005',
+    label: 'Gut',
+  },
+  [GoalType.FITNESS]: {
+    protocolId: 'prot_006',
+    label: 'Fitness',
+  },
+  [GoalType.WEIGHT]: {
+    protocolId: 'prot_007',
+    label: 'Weight',
+  },
+  [GoalType.RECOVERY]: {
+    protocolId: 'prot_008',
+    label: 'Recovery',
+  },
+  [GoalType.ENERGY]: {
+    protocolId: 'prot_009',
+    label: 'Energy',
+  },
+  [GoalType.MEN_HORMONE]: {
+    protocolId: 'prot_010',
+    label: 'Men Hormone',
+  },
+  [GoalType.WOMEN_HORMONE]: {
+    protocolId: 'prot_011',
+    label: 'Women Hormone',
+  },
+  [GoalType.SLEEP]: {
+    protocolId: 'prot_012',
+    label: 'Sleep',
+  },
+  [GoalType.STRESS]: {
+    protocolId: 'prot_013',
+    label: 'Stress',
+  },
+  [GoalType.SKIN]: {
+    protocolId: 'prot_014',
+    label: 'Skin',
+  },
+  [GoalType.NEURO]: {
+    protocolId: 'prot_015',
+    label: 'Neuro',
+  },
+  [GoalType.URINARY]: {
+    protocolId: 'prot_016',
+    label: 'Urinary',
+  },
+  [GoalType.METABOLIC]: {
+    protocolId: 'prot_017',
+    label: 'Metabolic',
+  },
+  [GoalType.BRAIN]: {
+    protocolId: 'prot_018',
+    label: 'Brain',
+  },
+  [GoalType.MOOD]: {
+    protocolId: 'prot_019',
+    label: 'Mood',
+  },
+  [GoalType.JOINTS]: {
+    protocolId: 'prot_020',
+    label: 'Joints',
+  },
+  [GoalType.HAIR]: {
+    protocolId: 'prot_021',
+    label: 'Hair',
+  },
+  [GoalType.NAILS]: {
+    protocolId: 'prot_022',
+    label: 'Nails',
   },
 };
 
@@ -81,44 +151,114 @@ export function getAvailableGoals(): Array<{
 }> {
   return [
     {
-      value: GoalType.ENERGY_RECOVERY,
-      label: 'Energy & Recovery',
-      description: 'Support sustained energy, ATP production, and post-exercise recovery',
-    },
-    {
-      value: GoalType.STRESS_SLEEP,
-      label: 'Stress & Sleep',
-      description: 'Support cortisol balance, relaxation, and quality sleep',
-    },
-    {
       value: GoalType.LONGEVITY,
-      label: 'Longevity & Prevention',
-      description: 'Comprehensive support for healthy aging and cellular protection',
+      label: 'Longevity',
+      description: 'Support healthy aging and cellular protection',
     },
     {
-      value: GoalType.ATHLETIC_PERFORMANCE,
-      label: 'Athletic Performance',
-      description: 'Optimize strength, endurance, and recovery for athletes',
+      value: GoalType.CARDIO,
+      label: 'Cardio',
+      description: 'Support cardiovascular health and blood pressure',
     },
     {
-      value: GoalType.METABOLIC_HEALTH,
-      label: 'Metabolic Health',
-      description: 'Support blood sugar balance and metabolic function',
+      value: GoalType.DETOX,
+      label: 'Detox',
+      description: 'Support detoxification and cellular cleansing',
     },
     {
-      value: GoalType.IMMUNE_SUPPORT,
-      label: 'Immune Support',
+      value: GoalType.IMMUNE,
+      label: 'Immune',
       description: 'Strengthen immune function and resilience',
     },
     {
-      value: GoalType.BRAIN_HEALTH,
-      label: 'Brain Health',
-      description: 'Support cognitive function, focus, and neuroplasticity',
+      value: GoalType.GUT,
+      label: 'Gut',
+      description: 'Support digestive health and microbiome balance',
     },
     {
-      value: GoalType.JOINT_HEALTH,
-      label: 'Joint Health',
-      description: 'Support joint mobility, cartilage health, and flexibility',
+      value: GoalType.FITNESS,
+      label: 'Fitness',
+      description: 'Support muscle development and athletic performance',
+    },
+    {
+      value: GoalType.WEIGHT,
+      label: 'Weight',
+      description: 'Support weight management and metabolic health',
+    },
+    {
+      value: GoalType.RECOVERY,
+      label: 'Recovery',
+      description: 'Optimize post-workout recovery and muscle repair',
+    },
+    {
+      value: GoalType.ENERGY,
+      label: 'Energy',
+      description: 'Support sustained energy and ATP production',
+    },
+    {
+      value: GoalType.MEN_HORMONE,
+      label: 'Men Hormone',
+      description: 'Support hormonal balance in men',
+    },
+    {
+      value: GoalType.WOMEN_HORMONE,
+      label: 'Women Hormone',
+      description: 'Support hormonal balance in women',
+    },
+    {
+      value: GoalType.SLEEP,
+      label: 'Sleep',
+      description: 'Support quality sleep and rest',
+    },
+    {
+      value: GoalType.STRESS,
+      label: 'Stress',
+      description: 'Support stress resilience and adaptation',
+    },
+    {
+      value: GoalType.SKIN,
+      label: 'Skin',
+      description: 'Support skin health and appearance',
+    },
+    {
+      value: GoalType.NEURO,
+      label: 'Neuro',
+      description: 'Support neurological health and function',
+    },
+    {
+      value: GoalType.URINARY,
+      label: 'Urinary',
+      description: 'Support urinary tract health',
+    },
+    {
+      value: GoalType.METABOLIC,
+      label: 'Metabolic',
+      description: 'Support metabolic function and glucose balance',
+    },
+    {
+      value: GoalType.BRAIN,
+      label: 'Brain',
+      description: 'Support cognitive function and brain health',
+    },
+    {
+      value: GoalType.MOOD,
+      label: 'Mood',
+      description: 'Support mood and emotional balance',
+    },
+    {
+      value: GoalType.JOINTS,
+      label: 'Joints',
+      description: 'Support joint health and mobility',
+    },
+    {
+      value: GoalType.HAIR,
+      label: 'Hair',
+      description: 'Support hair health and growth',
+    },
+    {
+      value: GoalType.NAILS,
+      label: 'Nails',
+      description: 'Support nail health and strength',
     },
   ];
 }

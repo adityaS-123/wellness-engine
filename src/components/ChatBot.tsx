@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Loader, Plus, Trash2, Menu, X } from 'lucide-react';
+import { Send, Loader, Plus, Trash2, Menu, X, Home } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface Message {
@@ -199,19 +199,25 @@ export function ChatBot() {
   }
 
   return (
-    <div className="w-full h-screen bg-slate-950 flex">
+    <div className="w-full h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex">
+      {/* Animated background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
+
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-screen w-64 bg-slate-900 border-r border-slate-700 flex flex-col z-40 transition-transform duration-300 ${
+        className={`fixed left-0 top-0 h-screen w-64 bg-slate-900/80 backdrop-blur-sm border-r border-emerald-500/20 flex flex-col z-40 transition-transform duration-300 ${
           showSidebar ? 'translate-x-0' : '-translate-x-full'
         } md:relative md:translate-x-0`}
       >
         {/* Sidebar Header */}
-        <div className="flex items-center justify-between p-4 border-b border-slate-700">
-          <h2 className="text-sm font-bold text-white">Chat History</h2>
+        <div className="flex items-center justify-between p-4 border-b border-emerald-500/20">
+          <h2 className="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Chat History</h2>
           <button
             onClick={() => setShowSidebar(false)}
-            className="md:hidden text-gray-400 hover:text-gray-200"
+            className="md:hidden text-gray-400 hover:text-emerald-400"
           >
             <X className="w-5 h-5" />
           </button>
@@ -220,7 +226,7 @@ export function ChatBot() {
         {/* New Chat Button */}
         <button
           onClick={createNewSession}
-          className="mx-4 mt-4 py-2 px-3 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2"
+          className="mx-4 mt-4 py-2 px-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 text-sm font-semibold rounded-lg hover:shadow-lg hover:shadow-emerald-500/50 transition flex items-center justify-center gap-2 transform hover:scale-105"
         >
           <Plus className="w-4 h-4" />
           New Chat
@@ -233,8 +239,8 @@ export function ChatBot() {
               key={session.id}
               className={`group relative p-3 rounded-lg cursor-pointer transition ${
                 currentSessionId === session.id
-                  ? 'bg-blue-800 text-blue-100'
-                  : 'hover:bg-slate-800 text-gray-300'
+                  ? 'bg-emerald-950/50 border border-emerald-500/50 text-emerald-100'
+                  : 'hover:bg-slate-800/50 text-gray-300 border border-transparent hover:border-emerald-500/30'
               }`}
               onClick={() => switchSession(session.id)}
             >
@@ -256,13 +262,13 @@ export function ChatBot() {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="p-4 border-t border-slate-700 bg-slate-800 space-y-3">
+        <div className="p-4 border-t border-emerald-500/20 bg-slate-900/50 space-y-3">
           <p className="text-xs text-gray-400 text-center">
-            Logged in as <br /> <span className="font-semibold text-white">{userName}</span>
+            Logged in as <br /> <span className="font-semibold text-emerald-400">{userName}</span>
           </p>
           <button
             onClick={handleSignOut}
-            className="w-full py-2 px-3 text-sm font-semibold text-red-400 hover:bg-red-950 rounded transition border border-red-700"
+            className="w-full py-2 px-3 text-sm font-semibold text-red-400 hover:bg-red-950/30 rounded-lg transition border border-red-500/30"
           >
             Sign Out
           </button>
@@ -270,24 +276,31 @@ export function ChatBot() {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col relative">
         {/* Top Bar */}
-        <div className="flex items-center justify-between h-14 px-4 bg-slate-900 border-b border-slate-700">
+        <div className="flex items-center justify-between h-14 px-4 bg-slate-950/50 backdrop-blur-sm border-b border-emerald-500/20">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowSidebar(!showSidebar)}
-              className="md:hidden text-gray-400 hover:text-gray-200"
+              className="md:hidden text-gray-400 hover:text-emerald-400"
             >
               <Menu className="w-5 h-5" />
             </button>
-            <h3 className="text-sm font-semibold text-white">
+            <h3 className="text-sm font-semibold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">
               {currentSession?.title || 'Chat'}
             </h3>
           </div>
+          <button
+            onClick={() => router.push('/')}
+            className="flex items-center gap-2 px-4 py-2 bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 rounded-lg transition text-sm font-medium border border-emerald-500/30"
+          >
+            <Home className="w-4 h-4" />
+            Home
+          </button>
         </div>
 
         {/* Messages Container */}
-        <div ref={messagesContainerRef} className="flex-1 overflow-y-auto bg-slate-950">
+        <div ref={messagesContainerRef} className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
           <div className="max-w-4xl mx-auto px-6 py-8 space-y-6">
             {messages.map((message) => (
               <div
@@ -297,7 +310,7 @@ export function ChatBot() {
                 }`}
               >
                 {message.type === 'bot' && (
-                  <div className="w-8 h-8 rounded-full bg-linear-to-br from-blue-400 to-blue-600 flex items-center justify-center shrink-0 text-white text-sm font-bold mr-3">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center shrink-0 text-slate-950 text-sm font-bold mr-3">
                     W
                   </div>
                 )}
@@ -309,8 +322,8 @@ export function ChatBot() {
                   <div
                     className={`inline-block px-4 py-2.5 rounded-2xl ${
                       message.type === 'user'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-slate-800 text-gray-100'
+                        ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 font-medium'
+                        : 'bg-slate-800/50 border border-emerald-500/30 text-gray-100'
                     }`}
                   >
                     <p className="text-sm leading-relaxed">{message.content}</p>
@@ -324,13 +337,13 @@ export function ChatBot() {
                   W
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-slate-500 rounded-full animate-bounce" />
+                  <div className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce" />
                   <div
-                    className="w-2 h-2 bg-slate-500 rounded-full animate-bounce"
+                    className="w-2 h-2 bg-cyan-400 rounded-full animate-bounce"
                     style={{ animationDelay: '0.2s' }}
                   />
                   <div
-                    className="w-2 h-2 bg-slate-500 rounded-full animate-bounce"
+                    className="w-2 h-2 bg-emerald-400 rounded-full animate-bounce"
                     style={{ animationDelay: '0.4s' }}
                   />
                 </div>
@@ -341,9 +354,9 @@ export function ChatBot() {
         </div>
 
         {/* Input Area - ChatGPT Style */}
-        <div className="border-t border-slate-700 bg-slate-900 px-4 py-4 pb-6">
+        <div className="border-t border-emerald-500/20 bg-slate-950/50 backdrop-blur-sm px-4 py-4 pb-6">
           <div className="max-w-4xl mx-auto">
-            <div className="flex gap-3 bg-slate-800 rounded-2xl px-4 py-3 border border-slate-700 focus-within:border-blue-500 focus-within:shadow-lg focus-within:shadow-blue-500/20 transition">
+            <div className="flex gap-3 bg-slate-800/50 rounded-2xl px-4 py-3 border border-emerald-500/30 focus-within:border-emerald-500/50 focus-within:shadow-lg focus-within:shadow-emerald-500/20 transition">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -356,7 +369,7 @@ export function ChatBot() {
               <button
                 onClick={handleSendMessage}
                 disabled={!input.trim() || isLoading}
-                className="shrink-0 text-blue-500 hover:text-blue-400 disabled:text-gray-600 disabled:cursor-not-allowed transition"
+                className="shrink-0 text-emerald-400 hover:text-cyan-400 disabled:text-gray-600 disabled:cursor-not-allowed transition"
               >
                 {isLoading ? (
                   <Loader className="w-5 h-5 animate-spin" />

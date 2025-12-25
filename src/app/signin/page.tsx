@@ -42,14 +42,20 @@ export default function SignIn() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-slate-950 flex flex-col">
+    <div className="w-full min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex flex-col">
+      {/* Animated background gradient */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
+
       {/* Header */}
-      <header className="w-full bg-slate-900 border-b border-slate-700 px-12 py-4">
-        <div className="flex items-center gap-3">
-          <span className="text-3xl">🏥</span>
+      <header className="w-full bg-slate-950/50 backdrop-blur-md border-b border-emerald-500/20 px-8 py-6">
+        <div className="flex items-center gap-3 max-w-7xl mx-auto">
+          <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-lg flex items-center justify-center text-slate-950 font-bold">W</div>
           <div>
-            <h1 className="text-2xl font-bold text-white">Wellness Engine</h1>
-            <p className="text-xs text-gray-400">Clinical Decision Support System</p>
+            <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Wellness Engine</h1>
+            <p className="text-xs text-gray-400">Clinical Decision Support</p>
           </div>
         </div>
       </header>
@@ -58,16 +64,16 @@ export default function SignIn() {
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
           {/* Form Card */}
-          <div className="bg-slate-900 border border-slate-700 rounded-lg p-8 shadow-sm">
+          <div className="bg-slate-800/50 backdrop-blur-sm border border-emerald-500/30 rounded-2xl p-8 shadow-xl shadow-emerald-500/10">
             <div className="mb-8">
-              <h2 className="text-2xl font-bold text-white mb-2">Sign In</h2>
-              <p className="text-sm text-gray-400">
-                Access your wellness prescriptions and chat history
+              <h2 className="text-3xl font-bold text-white mb-2">Welcome Back</h2>
+              <p className="text-gray-400 text-sm font-light">
+                Sign in to access your wellness profile and recommendations
               </p>
             </div>
 
             {error && (
-              <div className="mb-6 p-3 bg-red-950 border border-red-700 rounded text-red-400 text-sm">
+              <div className="mb-6 p-4 bg-red-500/20 border border-red-500/40 rounded-lg text-red-300 text-sm">
                 {error}
               </div>
             )}
@@ -75,7 +81,7 @@ export default function SignIn() {
             <form onSubmit={handleSignIn} className="space-y-5">
               {/* Email Field */}
               <div>
-                <label className="text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide block">
+                <label className="text-sm font-semibold text-gray-300 mb-2 block">
                   Email Address
                 </label>
                 <div className="relative">
@@ -86,14 +92,14 @@ export default function SignIn() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="you@example.com"
                     required
-                    className="w-full pl-10 pr-3 py-2.5 border border-slate-700 rounded text-sm text-white bg-slate-800 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+                    className="w-full pl-10 pr-3 py-2.5 border border-emerald-500/30 rounded-lg text-sm text-white bg-slate-900/50 placeholder-gray-500 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
                   />
                 </div>
               </div>
 
               {/* Password Field */}
               <div>
-                <label className="text-xs font-semibold text-gray-300 mb-2 uppercase tracking-wide block">
+                <label className="text-sm font-semibold text-gray-300 mb-2 block">
                   Password
                 </label>
                 <div className="relative">
@@ -104,7 +110,7 @@ export default function SignIn() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     required
-                    className="w-full pl-10 pr-3 py-2.5 border border-slate-700 rounded text-sm text-white bg-slate-800 placeholder-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+                    className="w-full pl-10 pr-3 py-2.5 border border-emerald-500/30 rounded-lg text-sm text-white bg-slate-900/50 placeholder-gray-500 focus:border-emerald-500/50 focus:ring-2 focus:ring-emerald-500/20 outline-none transition"
                   />
                 </div>
               </div>
@@ -113,7 +119,7 @@ export default function SignIn() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-2.5 px-4 bg-blue-600 text-white rounded font-semibold text-sm hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition flex items-center justify-center gap-2"
+                className="w-full py-2.5 px-4 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 rounded-lg font-semibold text-sm hover:shadow-lg hover:shadow-emerald-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition flex items-center justify-center gap-2 mt-6 transform hover:scale-105"
               >
                 {isLoading && <Loader className="w-4 h-4 animate-spin" />}
                 {isLoading ? 'Signing In...' : 'Sign In'}
@@ -122,27 +128,20 @@ export default function SignIn() {
 
             {/* Forgot Password Link */}
             <div className="mt-4 text-center">
-              <a href="#" className="text-xs text-blue-400 hover:text-blue-300 font-semibold">
+              <a href="#" className="text-sm text-emerald-400 hover:text-cyan-400 font-semibold transition">
                 Forgot password?
               </a>
             </div>
 
             {/* Sign Up Link */}
-            <div className="mt-6 pt-6 border-t border-slate-700">
+            <div className="mt-6 pt-6 border-t border-emerald-500/20">
               <p className="text-sm text-gray-400 text-center">
                 Don't have an account?{' '}
-                <Link href="/signup" className="text-blue-400 hover:text-blue-300 font-semibold">
-                  Sign Up
+                <Link href="/signup" className="text-emerald-400 hover:text-cyan-400 font-semibold transition">
+                  Create one
                 </Link>
               </p>
             </div>
-          </div>
-
-          {/* Demo Note */}
-          <div className="mt-6 p-4 bg-blue-950 border border-blue-700 rounded text-center">
-            <p className="text-xs text-blue-300">
-              <span className="font-semibold">Demo Mode:</span> Sign in functionality to be implemented
-            </p>
           </div>
         </div>
       </div>

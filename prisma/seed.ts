@@ -27,14 +27,18 @@ async function main() {
     // Map the supplement data to the schema
     const externalId = `sup_${String(supplementCount + 1).padStart(3, '0')}`;
     
+    // Get all categories for this supplement
+    const categories = supplement.categories || [];
+    const primaryCategory = categories.length > 0 ? categories[0] : 'other';
+    
     const created = await prisma.supplement.upsert({
       where: { externalId },
       update: {},
       create: {
         externalId,
         name: supplement.name,
-        category: supplement.categories ? supplement.categories[0] : 'other',
-        primaryMechanism: supplement.primary_mechanism || supplement.primaryMechanism || '',
+        category: primaryCategory,
+        primaryMechanism: supplement.primary_mechanism || '',
         benefits: supplement.key_benefits ? [supplement.key_benefits] : [],
         doseRangeMin: 1,
         doseRangeMax: 2,
@@ -61,105 +65,66 @@ async function main() {
   // ============================================
   console.log('Seeding protocols...');
   
-  // Create basic protocols from supplement categories
-  // Define goal-specific supplement assignments
-  const protocolSupplementMap: Record<string, { core: string[]; optional: string[] }> = {
-    ENERGY_RECOVERY: {
-      core: ['Creatine Monohydrate', 'Magnesium Glycinate', 'B-Complex (High Potency)'],
-      optional: ['Omega-3 Fish Oil', 'CoQ10 (Ubiquinol)', 'Vitamin D3', 'Iron (Ferrous Bisglycinate)'],
-    },
-    STRESS_SLEEP: {
-      core: ['Ashwagandha (Withanolides 5%)', 'Magnesium Glycinate', 'L-Theanine'],
-      optional: ['Rhodiola Rosea (3% Rosavins)', 'B-Complex (High Potency)'],
-    },
-    LONGEVITY: {
-      core: ['Resveratrol', 'CoQ10 (Ubiquinol)', 'Turmeric (95% Curcuminoids)'],
-      optional: ['Omega-3 Fish Oil', 'Vitamin D3', 'Probiotics (Multi-strain)', 'Berberine'],
-    },
-    ATHLETIC_PERFORMANCE: {
-      core: ['Creatine Monohydrate', 'Zinc Picolinate', 'Magnesium Glycinate'],
-      optional: ['Omega-3 Fish Oil', 'B-Complex (High Potency)', 'Iron (Ferrous Bisglycinate)'],
-    },
-    METABOLIC_HEALTH: {
-      core: ['Berberine', 'Turmeric (95% Curcuminoids)', 'Zinc Picolinate'],
-      optional: ['Magnesium Glycinate', 'Probiotics (Multi-strain)', 'Vitamin D3'],
-    },
-    BRAIN_HEALTH: {
-      core: ['Omega-3 Fish Oil', 'B-Complex (High Potency)', 'Turmeric (95% Curcuminoids)'],
-      optional: ['Magnesium Glycinate', 'L-Theanine', 'CoQ10 (Ubiquinol)'],
-    },
-    IMMUNE_SUPPORT: {
-      core: ['Vitamin D3', 'Zinc Picolinate', 'Probiotics (Multi-strain)'],
-      optional: ['Turmeric (95% Curcuminoids)', 'B-Complex (High Potency)'],
-    },
-    JOINT_HEALTH: {
-      core: ['Turmeric (95% Curcuminoids)', 'Omega-3 Fish Oil'],
-      optional: ['Magnesium Glycinate', 'Vitamin D3', 'Probiotics (Multi-strain)'],
-    },
-  };
-
-  const protocols = [
-    {
-      externalId: 'prot_001',
-      name: 'Energy & Recovery',
-      goal: 'ENERGY_RECOVERY',
-      description: 'Optimize energy production and recovery',
-    },
-    {
-      externalId: 'prot_002',
-      name: 'Stress & Sleep',
-      goal: 'STRESS_SLEEP',
-      description: 'Support stress resilience and sleep quality',
-    },
-    {
-      externalId: 'prot_003',
-      name: 'Longevity & Prevention',
-      goal: 'LONGEVITY',
-      description: 'Comprehensive support for healthy aging',
-    },
-    {
-      externalId: 'prot_004',
-      name: 'Athletic Performance',
-      goal: 'ATHLETIC_PERFORMANCE',
-      description: 'Optimize strength, endurance, and recovery',
-    },
-    {
-      externalId: 'prot_005',
-      name: 'Metabolic Health',
-      goal: 'METABOLIC_HEALTH',
-      description: 'Support blood sugar balance and metabolism',
-    },
-    {
-      externalId: 'prot_006',
-      name: 'Brain Health',
-      goal: 'BRAIN_HEALTH',
-      description: 'Support cognitive function and neuroprotection',
-    },
+  // Create protocols for all 22 categories
+  const categoryProtocols = [
+    { externalId: 'prot_001', category: 'longevity', name: 'Longevity', description: 'Support healthy aging and cellular protection' },
+    { externalId: 'prot_002', category: 'cardio', name: 'Cardio', description: 'Support cardiovascular health and blood pressure' },
+    { externalId: 'prot_003', category: 'detox', name: 'Detox', description: 'Support detoxification and cellular cleansing' },
+    { externalId: 'prot_004', category: 'immune', name: 'Immune', description: 'Strengthen immune function and resilience' },
+    { externalId: 'prot_005', category: 'gut', name: 'Gut', description: 'Support digestive health and microbiome balance' },
+    { externalId: 'prot_006', category: 'fitness', name: 'Fitness', description: 'Support muscle development and athletic performance' },
+    { externalId: 'prot_007', category: 'weight', name: 'Weight', description: 'Support weight management and metabolic health' },
+    { externalId: 'prot_008', category: 'recovery', name: 'Recovery', description: 'Optimize post-workout recovery and muscle repair' },
+    { externalId: 'prot_009', category: 'energy', name: 'Energy', description: 'Support sustained energy and ATP production' },
+    { externalId: 'prot_010', category: 'men_hormone', name: 'Men Hormone', description: 'Support hormonal balance in men' },
+    { externalId: 'prot_011', category: 'women_hormone', name: 'Women Hormone', description: 'Support hormonal balance in women' },
+    { externalId: 'prot_012', category: 'sleep', name: 'Sleep', description: 'Support quality sleep and rest' },
+    { externalId: 'prot_013', category: 'stress', name: 'Stress', description: 'Support stress resilience and adaptation' },
+    { externalId: 'prot_014', category: 'skin', name: 'Skin', description: 'Support skin health and appearance' },
+    { externalId: 'prot_015', category: 'neuro', name: 'Neuro', description: 'Support neurological health and function' },
+    { externalId: 'prot_016', category: 'urinary', name: 'Urinary', description: 'Support urinary tract health' },
+    { externalId: 'prot_017', category: 'metabolic', name: 'Metabolic', description: 'Support metabolic function and glucose balance' },
+    { externalId: 'prot_018', category: 'brain', name: 'Brain', description: 'Support cognitive function and brain health' },
+    { externalId: 'prot_019', category: 'mood', name: 'Mood', description: 'Support mood and emotional balance' },
+    { externalId: 'prot_020', category: 'joints', name: 'Joints', description: 'Support joint health and mobility' },
+    { externalId: 'prot_021', category: 'hair', name: 'Hair', description: 'Support hair health and growth' },
+    { externalId: 'prot_022', category: 'nails', name: 'Nails', description: 'Support nail health and strength' },
   ];
 
-  for (const protocol of protocols) {
-    // Get supplement IDs for this protocol
-    const supplementMap = protocolSupplementMap[protocol.goal] || { core: [], optional: [] };
-    
-    const coreSupplementIds = supplementMap.core
-      .map((name) => createdSupplements[name])
-      .filter(Boolean);
-    
-    const optionalSupplementIds = supplementMap.optional
+  // Map each category to supplements that have that category
+  const categorySupplementMap: Record<string, string[]> = {};
+  
+  for (const supplement of supplementsData) {
+    if (supplement.categories && Array.isArray(supplement.categories)) {
+      for (const category of supplement.categories) {
+        if (!categorySupplementMap[category]) {
+          categorySupplementMap[category] = [];
+        }
+        categorySupplementMap[category].push(supplement.name);
+      }
+    }
+  }
+
+  let protocolCount = 0;
+  for (const categoryProtocol of categoryProtocols) {
+    const supplementIds = (categorySupplementMap[categoryProtocol.category] || [])
       .map((name) => createdSupplements[name])
       .filter(Boolean);
 
+    const coreSupplementIds = supplementIds.slice(0, Math.ceil(supplementIds.length / 2));
+    const optionalSupplementIds = supplementIds.slice(Math.ceil(supplementIds.length / 2));
+
     const created = await prisma.protocol.upsert({
-      where: { externalId: protocol.externalId },
+      where: { externalId: categoryProtocol.externalId },
       update: {
         coreSupplementsJson: coreSupplementIds,
         optionalSupplementsJson: optionalSupplementIds,
       },
       create: {
-        externalId: protocol.externalId,
-        name: protocol.name,
-        goal: protocol.goal,
-        description: protocol.description,
+        externalId: categoryProtocol.externalId,
+        name: categoryProtocol.name,
+        goal: categoryProtocol.category.toUpperCase(),
+        description: categoryProtocol.description,
         coreSupplementsJson: coreSupplementIds,
         optionalSupplementsJson: optionalSupplementIds,
       },
@@ -199,9 +164,11 @@ async function main() {
         },
       });
     }
+
+    protocolCount++;
   }
 
-  console.log(`✓ Seeded ${protocols.length} protocols`);
+  console.log(`✓ Seeded ${protocolCount} protocols (1 for each category)`);
   console.log('Seeding demo user...');
   
   const demoUser = await prisma.user.upsert({

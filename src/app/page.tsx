@@ -1,256 +1,275 @@
+'use client';
+
+import React from 'react';
 import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="w-screen min-h-screen bg-slate-950 overflow-x-hidden">
+    <div className="w-full min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+      {/* Animated background gradient */}
+      <div className="fixed inset-0 -z-10 overflow-hidden">
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
+
       {/* Header */}
-      <header className="w-full bg-slate-900 border-b border-slate-700 shadow-md sticky top-0 z-50">
-        <div className="w-full px-12 py-4">
-          <div className="flex items-center justify-between">
+      <header className="w-full bg-slate-950/50 backdrop-blur-md border-b border-emerald-500/20 sticky top-0 z-50">
+        <div className="w-full px-12 py-6">
+          <div className="flex items-center justify-between max-w-7xl mx-auto">
             <div className="flex items-center gap-3">
-              <span className="text-3xl">🏥</span>
-              <div>
-                <h1 className="text-2xl font-bold text-white">Wellness Engine</h1>
-                <p className="text-xs text-gray-400">Clinical Decision Support System</p>
-              </div>
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-lg flex items-center justify-center text-slate-950 font-bold text-lg">W</div>
+              <span className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400">Wellness Engine</span>
             </div>
-            <nav className="flex gap-4">
-              <Link
-                href="/chat"
-                className="px-8 py-2.5 bg-slate-700 text-white rounded-lg font-semibold hover:bg-slate-600 transition text-sm"
-              >
-                Chat Assistant
+            <nav className="flex gap-10 items-center">
+              <Link href="#services" className="text-gray-300 font-medium hover:text-emerald-400 transition duration-300">
+                Services
               </Link>
-              <Link
-                href="/generate"
-                className="px-8 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition text-sm"
-              >
-                Generate Prescription
+              <Link href="#" className="text-gray-300 font-medium hover:text-emerald-400 transition duration-300">
+                About
               </Link>
-              <Link
-                href="/signin"
-                className="px-8 py-2.5 bg-gray-600 text-white rounded-lg font-semibold hover:bg-gray-700 transition text-sm"
-              >
-                Sign In
+              <Link href="#" className="text-gray-300 font-medium hover:text-emerald-400 transition duration-300">
+                Contact
               </Link>
-              <Link
-                href="/signup"
-                className="px-8 py-2.5 border-2 border-blue-500 text-blue-400 rounded-lg font-semibold hover:bg-blue-950 transition text-sm"
-              >
-                Sign Up
-              </Link>
+              <UserNav />
             </nav>
           </div>
         </div>
       </header>
 
-      {/* Hero Section - Full Screen */}
-      <main className="w-full">
-        <section className="w-screen min-h-screen flex flex-col items-center justify-center px-12 bg-linear-to-br from-slate-950 via-slate-900 to-slate-900">
-          <div className="text-center max-w-4xl">
-            <h2 className="text-5xl font-bold text-white mb-6">
-              Evidence-Based Clinical Decision Support
+      {/* Hero Section */}
+      <section className="relative w-full py-32 px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 gap-16 items-center">
+            <div>
+              <div className="inline-block mb-6 px-4 py-2 bg-emerald-500/10 border border-emerald-500/30 rounded-full">
+                <p className="text-emerald-400 text-sm font-medium">Next Generation Wellness</p>
+              </div>
+              <h1 className="text-6xl font-bold mb-8 leading-tight">
+                <span className="text-white">Transform Your</span>
+                <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500">Wellness Future</span>
+              </h1>
+              <p className="text-xl text-gray-400 mb-10 leading-relaxed font-light">
+                AI-powered supplement recommendations powered by clinical expertise. Personalized health optimization at your fingertips.
+              </p>
+              <div className="flex gap-4">
+                <Link
+                  href="/generate"
+                  className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 rounded-lg font-semibold hover:shadow-lg hover:shadow-emerald-500/50 transition duration-300 transform hover:scale-105"
+                >
+                  Create Your Profile
+                </Link>
+                <Link
+                  href="/chat"
+                  className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 rounded-lg font-semibold hover:shadow-lg hover:shadow-cyan-500/50 transition duration-300 transform hover:scale-105"
+                >
+                  Chat 
+                </Link>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl blur-2xl"></div>
+              <div className="relative bg-slate-800/50 backdrop-blur-sm border border-emerald-500/20 rounded-2xl p-12 flex flex-col items-center justify-center h-96">
+                <div className="text-7xl mb-4 animate-bounce">💊</div>
+                <p className="text-gray-300 text-center font-light">Intelligent Supplement Optimization</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section id="services" className="relative w-full py-32 px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl font-bold mb-4 text-white">
+              Powerful Features
             </h2>
-            <p className="text-lg text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed font-medium">
-              Precision wellness recommendations based on comprehensive patient profiling, safety validation, and clinical protocols. Streamline supplement prescribing with deterministic algorithms.
+            <p className="text-xl text-gray-400 font-light">
+              Everything you need for optimal wellness
             </p>
-            <Link
+          </div>
+          
+          <div className="grid grid-cols-3 gap-8">
+            <ServiceCard
+              title="Health Profiling"
+              description="Comprehensive AI analysis of your health data, medical history, and wellness goals"
               href="/generate"
-              className="inline-block px-10 py-3 bg-blue-600 text-white rounded-lg font-semibold text-base hover:bg-blue-700 transition shadow-md hover:shadow-lg"
-            >
-              Start Assessment →
-            </Link>
+              icon="🧬"
+            />
+            <ServiceCard
+              title="Safety Intelligence"
+              description="Real-time contraindication checking and drug-supplement interaction validation"
+              href="/chat"
+              icon="🔐"
+            />
+            <ServiceCard
+              title="Personalized Dosing"
+              description="Evidence-based calculations tailored to your unique metrics and requirements"
+              href="/chat"
+              icon="⚡"
+            />
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Features Grid - Full Screen */}
-        <section className="w-screen py-20 px-12 bg-white border-t border-gray-200">
-          <div className="flex flex-col items-center">
-            <h3 className="text-4xl font-bold text-white mb-12">
-              Clinical Capabilities
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl">
-              <FeatureCard
-                emoji="✓"
-                title="Safety Validation"
-                description="Contraindication and drug-supplement interaction checking"
-              />
-              <FeatureCard
-                emoji="⚖️"
-                title="Personalized Dosing"
-                description="Evidence-based dose calculations per individual metrics"
-              />
-              <FeatureCard
-                emoji="📊"
-                title="Protocol-Based"
-                description="Standardized clinical protocols for consistent outcomes"
-              />
-              <FeatureCard
-                emoji="🔍"
-                title="Comprehensive Assessment"
-                description="Multi-parameter clinical decision algorithm"
-              />
+
+      {/* CTA Section */}
+      <section className="relative w-full py-32 px-12">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 border border-emerald-500/30 backdrop-blur-xl rounded-2xl p-16 text-center">
+            <h2 className="text-5xl font-bold mb-6 text-white">
+              Ready to Optimize?
+            </h2>
+            <p className="text-xl text-gray-300 mb-12 font-light">
+              Join thousands achieving their wellness goals with AI-powered recommendations.
+            </p>
+            <div className="flex gap-4 justify-center">
+              <Link
+                href="/generate"
+                className="inline-block px-12 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 rounded-lg font-semibold hover:shadow-lg hover:shadow-emerald-500/50 transition duration-300 transform hover:scale-105"
+              >
+                Begin Your Journey Now
+              </Link>
+              <Link
+                href="/chat"
+                className="inline-block px-12 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-slate-950 rounded-lg font-semibold hover:shadow-lg hover:shadow-cyan-500/50 transition duration-300 transform hover:scale-105"
+              >
+                Chat with AI
+              </Link>
             </div>
           </div>
-        </section>
-
-        {/* How It Works - Full Screen */}
-        <section className="w-screen py-20 px-12 bg-slate-800 border-t border-slate-700">
-          <div className="flex flex-col items-center w-full">
-            <h3 className="text-4xl font-bold text-white mb-12 text-center">
-              Assessment Workflow
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl">
-              <Step
-                number={1}
-                title="Patient History"
-                description="Demographic and clinical profile collection"
-              />
-              <Step
-                number={2}
-                title="Safety Analysis"
-                description="Medication interaction and contraindication review"
-              />
-              <Step
-                number={3}
-                title="Protocol Selection"
-                description="Evidence-based protocol matching"
-              />
-              <Step
-                number={4}
-                title="Personalization"
-                description="Individualized recommendations with dosing"
-              />
-            </div>
-          </div>
-        </section>
-
-        {/* Budget Tiers - Full Screen */}
-        <section className="w-screen py-20 px-12 bg-white border-t border-gray-200">
-          <div className="flex flex-col items-center w-full">
-            <h3 className="text-4xl font-bold text-white mb-12 text-center">
-              Recommendation Tiers
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-5xl">
-              <BudgetTierCard
-                tier="Essential"
-                description="Core supplements only"
-                supplements={5}
-                highlights={[
-                  '✓ Evidence-based essentials',
-                  '✓ Standard dosing',
-                  '✓ Safety validated',
-                ]}
-              />
-              <BudgetTierCard
-                tier="Comprehensive"
-                description="Complete optimization"
-                supplements={8}
-                highlights={[
-                  '✓ Core + targeted support',
-                  '✓ Personalized dosing',
-                  '✓ Synergistic formulation',
-                ]}
-                featured
-              />
-              <BudgetTierCard
-                tier="Premium"
-                description="Maximum support"
-                supplements={12}
-                highlights={[
-                  '✓ Full clinical protocol',
-                  '✓ Advanced formulations',
-                  '✓ Comprehensive optimization',
-                ]}
-              />
-            </div>
-          </div>
-        </section>
-      </main>
+        </div>
+      </section>
 
       {/* Footer */}
-      <footer className="w-full bg-slate-900 text-gray-400 py-8 border-t border-slate-700">
-        <div className="w-full px-12">
-          <p className="text-center text-sm">
-            Medical Disclaimer: This tool provides evidence-based recommendations and is not a substitute
-            for professional medical advice. Always consult with a healthcare provider before starting new supplements.
-          </p>
+      <footer className="relative w-full bg-slate-950/80 backdrop-blur-sm border-t border-emerald-500/10 py-16 mt-20">
+        <div className="max-w-7xl mx-auto px-12">
+          <div className="grid grid-cols-4 gap-12 mb-12">
+            <div>
+              <h4 className="text-emerald-400 font-semibold mb-4 text-sm uppercase tracking-wider">Product</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="/" className="text-gray-400 hover:text-emerald-400 transition">Home</Link></li>
+                <li><Link href="#services" className="text-gray-400 hover:text-emerald-400 transition">Features</Link></li>
+                <li><Link href="/generate" className="text-gray-400 hover:text-emerald-400 transition">Assessment</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-emerald-400 font-semibold mb-4 text-sm uppercase tracking-wider">Company</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="#" className="text-gray-400 hover:text-emerald-400 transition">About</Link></li>
+                <li><Link href="#" className="text-gray-400 hover:text-emerald-400 transition">Blog</Link></li>
+                <li><Link href="#" className="text-gray-400 hover:text-emerald-400 transition">Contact</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-emerald-400 font-semibold mb-4 text-sm uppercase tracking-wider">Resources</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="#" className="text-gray-400 hover:text-emerald-400 transition">Docs</Link></li>
+                <li><Link href="#" className="text-gray-400 hover:text-emerald-400 transition">API</Link></li>
+                <li><Link href="#" className="text-gray-400 hover:text-emerald-400 transition">Support</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="text-emerald-400 font-semibold mb-4 text-sm uppercase tracking-wider">Legal</h4>
+              <ul className="space-y-3 text-sm">
+                <li><Link href="#" className="text-gray-400 hover:text-emerald-400 transition">Privacy</Link></li>
+                <li><Link href="#" className="text-gray-400 hover:text-emerald-400 transition">Terms</Link></li>
+                <li><Link href="#" className="text-gray-400 hover:text-emerald-400 transition">Disclaimer</Link></li>
+              </ul>
+            </div>
+          </div>
+          <div className="border-t border-emerald-500/10 pt-8 text-center text-sm text-gray-500">
+            <p className="mb-2">Always consult with a healthcare provider before starting supplements.</p>
+            <p>© 2025 Wellness Engine. Built with innovation.</p>
+          </div>
         </div>
       </footer>
     </div>
   );
 }
 
-interface FeatureCardProps {
-  emoji: string;
+interface ServiceCardProps {
   title: string;
   description: string;
+  href: string;
+  icon: string;
 }
 
-function FeatureCard({ emoji, title, description }: FeatureCardProps) {
+function ServiceCard({ title, description, href, icon }: ServiceCardProps) {
   return (
-    <div className="bg-slate-800 p-6 rounded-lg shadow border border-slate-700 hover:shadow-md transition">
-      <div className="text-2xl mb-3 font-bold text-blue-400">{emoji}</div>
-      <h4 className="text-base font-bold text-white mb-2">{title}</h4>
-      <p className="text-sm text-gray-400 font-medium">{description}</p>
+    <div className="group bg-slate-800/50 backdrop-blur-sm border border-emerald-500/20 hover:border-emerald-500/50 rounded-xl p-8 transition duration-300 hover:shadow-lg hover:shadow-emerald-500/20">
+      <div className="text-5xl mb-4 group-hover:scale-110 transition duration-300">{icon}</div>
+      <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
+      <p className="text-gray-400 mb-6 leading-relaxed text-sm font-light">{description}</p>
+      <Link href={href} className="inline-flex items-center gap-2 text-emerald-400 font-semibold hover:text-cyan-400 transition duration-300 group-hover:gap-3">
+        Explore <span>→</span>
+      </Link>
     </div>
   );
 }
 
-interface StepProps {
-  number: number;
-  title: string;
-  description: string;
+interface StatsCardProps {
+  number: string;
+  label: string;
 }
 
-function Step({ number, title, description }: StepProps) {
+function StatsCard({ number, label }: StatsCardProps) {
   return (
-    <div className="text-center bg-slate-800 p-6 rounded-lg shadow border border-slate-700 hover:shadow-md transition">
-      <div className="w-10 h-10 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold mx-auto mb-3">
-        {number}
+    <div className="bg-slate-800/50 backdrop-blur-sm border border-emerald-500/20 rounded-xl p-8 text-center hover:border-emerald-500/50 transition duration-300">
+      <p className="text-4xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent mb-2">{number}</p>
+      <p className="text-gray-400 font-light">{label}</p>
+    </div>
+  );
+}
+
+function UserNav() {
+  const [user, setUser] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      try {
+        setUser(JSON.parse(userData));
+      } catch (e) {
+        console.error('Failed to parse user data');
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    window.location.href = '/';
+  };
+
+  if (user) {
+    return (
+      <div className="flex gap-4 items-center">
+        <span className="text-gray-300 text-sm font-medium">{user.name || user.email}</span>
+        <button
+          onClick={handleLogout}
+          className="px-4 py-2 bg-red-500/20 text-red-400 border border-red-500/30 rounded-lg font-medium hover:bg-red-500/30 transition duration-300 text-sm"
+        >
+          Sign Out
+        </button>
       </div>
-      <h4 className="text-base font-bold text-white mb-2">{title}</h4>
-      <p className="text-sm text-gray-400 font-medium">{description}</p>
-    </div>
-  );
-}
+    );
+  }
 
-interface BudgetTierCardProps {
-  tier: string;
-  description: string;
-  supplements: number;
-  highlights: string[];
-  featured?: boolean;
-}
-
-function BudgetTierCard({
-  tier,
-  description,
-  supplements,
-  highlights,
-  featured,
-}: BudgetTierCardProps) {
   return (
-    <div
-      className={`rounded-lg p-6 transition border ${
-        featured
-          ? 'bg-blue-950 border-blue-600 shadow-md'
-          : 'bg-slate-800 border-slate-700 shadow hover:shadow-md'
-      }`}
-    >
-      <h4 className="text-lg font-bold text-white mb-1">{tier}</h4>
-      <p className="text-sm text-gray-400 mb-3">{description}</p>
-      <p className="text-sm font-semibold text-blue-400 mb-4">
-        Up to <span className="font-bold">{supplements}</span> supplements
-      </p>
-      <ul className="space-y-2">
-        {highlights.map((highlight, idx) => (
-          <li key={idx} className="text-sm text-gray-300 font-medium">
-            {highlight}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <Link
+        href="/signin"
+        className="px-6 py-2 text-gray-300 font-medium hover:text-emerald-400 transition duration-300"
+      >
+        Sign In
+      </Link>
+      <Link
+        href="/signup"
+        className="px-6 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 rounded-lg font-semibold hover:shadow-lg hover:shadow-emerald-500/30 transition duration-300"
+      >
+        Sign Up
+      </Link>
+    </>
   );
 }
-

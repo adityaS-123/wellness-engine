@@ -25,6 +25,7 @@ model User {
 
   accounts      Account[]
   sessions      Session[]
+  profile       UserProfile?
   prescriptions Prescription[]
   chatSessions  ChatSession[]
 
@@ -65,6 +66,41 @@ enum UserRole {
   ADMIN
   PRACTITIONER
   USER
+}
+
+// ============================================
+// USER PROFILE & ASSESSMENT
+// ============================================
+
+model UserProfile {
+  id            String    @id @default(cuid())
+  userId        String    @unique
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  // Demographics
+  age           Int
+  gender        String    // MALE, FEMALE, OTHER
+  weight        Float     // kg
+  height        Float     // cm
+  
+  // Optional fields
+  menopauseStatus      String?   // PREMENOPAUSAL, PERIMENOPAUSAL, POSTMENOPAUSAL
+  pregnancyIntention   String?   // YES, NO, UNSURE
+  trainingFrequency    String?   // NONE, LIGHT, MODERATE, INTENSE, VERY_INTENSE
+  
+  // Health goal and preferences
+  goal                 String    // One of the 22 categories
+  budgetTier           String    // ESSENTIAL, COMPREHENSIVE, PREMIUM
+  symptomsRating       Int?      // 0-10 rating
+  
+  // Clinical flags
+  currentMedications   String[]  // Array of medication names
+  medicalConditions    String[]  // Array of condition names
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("user_profiles")
 }
 
 // ============================================
